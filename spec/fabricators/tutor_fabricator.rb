@@ -1,4 +1,4 @@
 Fabricator(:tutor) do
-  name   "MyString"
+  name   'MyString'
   course nil
 end
