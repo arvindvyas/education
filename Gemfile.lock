@@ -91,6 +91,7 @@ GEM
     drb (2.2.0)
       ruby2_keywords
     erubi (1.12.0)
+    fabrication (2.30.0)
     faker (3.2.3)
       i18n (>= 1.8.11, < 2)
     globalid (1.2.1)
@@ -216,6 +217,7 @@ PLATFORMS
 DEPENDENCIES
   bootsnap
   debug
+  fabrication
   faker
   puma (>= 5.0)
   rails (~> 7.1.3)
