@@ -40,12 +40,14 @@ gem 'pagy', '~> 6.5'
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mswin mswin64 mingw x64_mingw ]
-  gem "rspec-rails"
-  gem 'fabrication'
+  gem "rspec-rails", '~>6.1'
+  gem 'fabrication', '~>2.30'
+
 end
 
 group :test do
-  gem 'faker'
+  gem 'faker', '~>3.2'
+  gem 'shoulda-matchers', '~> 5.3'
 end
 
 group :development do
