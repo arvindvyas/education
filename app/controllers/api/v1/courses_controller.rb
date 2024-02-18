@@ -21,31 +21,11 @@ module Api
       # GET /api/v1/courses
       # List all courses along with their tutors.
       def index
-        # Assuming you have pagy set up for the Course model
-        page = params[:page].to_i
-        items_per_page = params[:per_page].to_i
-        page = DEFAULT_PAGE if page.zero? # Default to page 1 if page is not provided
-        items_per_page = DEFAULT_ITEMS_PER_PAGE if items_per_page.zero? # Default to 10 items per page if not provided
-
-        # Paginate using pagy
-        pagy, courses = pagy(Course.includes(:tutors).all, page: page, items: items_per_page)
+        pagy, courses = pagy_with_pagination(Course.includes(:tutors).all)
 
         render json: {
-          data: courses.as_json(
-            only: %i[id name],
-            include: {
-              tutors: { only: %i[id name] }
-            }
-          ),
-          meta: {
-            pagination: {
-              current_page: pagy.page,
-              next_page: pagy.next,
-              prev_page: pagy.prev,
-              total_pages: pagy.pages,
-              total_entries: pagy.count
-            }
-          }
+          data: courses.as_json(only: %i[id name], include: { tutors: { only: %i[id name] } }),
+          meta: { pagination: pagy_metadata(pagy) }
         }
       end
 
@@ -54,6 +34,22 @@ module Api
       # Strong parameters for creating a course with associated tutors.
       def course_params
         params.require(:course).permit(:name, tutors_attributes: [:name])
+      end
+
+      def pagy_with_pagination(scope)
+        page = params.fetch(:page, DEFAULT_PAGE).to_i
+        items_per_page = params.fetch(:per_page, DEFAULT_ITEMS_PER_PAGE).to_i
+        pagy(scope, page: page, items: items_per_page)
+      end
+
+      def pagy_metadata(pagy)
+        {
+          current_page: pagy.page,
+          next_page: pagy.next,
+          prev_page: pagy.prev,
+          total_pages: pagy.pages,
+          total_entries: pagy.count
+        }
       end
     end
   end
